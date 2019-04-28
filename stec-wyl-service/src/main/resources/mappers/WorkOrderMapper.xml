@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stec.masterdata.mapper.wyl.WorkOrderMapper">
+
+    <select id="countBySource" parameterType="map" resultType="map">
+        select
+        SUM(CASE style WHEN '1' THEN count ELSE 0 END) count,
+        SUM(CASE style WHEN '2' THEN count ELSE 0 END) temporaryCount,
+        SUM(CASE style WHEN '3' THEN count ELSE 0 END) planCount,
+        SUM(CASE style WHEN '4' THEN count ELSE 0 END) defectCount
+        from (
+        select '1' style, count(*) as count from work_order a where a.plan_end_date &lt;#{end} and a.plan_start_date >=#{start}
+        UNION
+        select '2' style,count(*) as count from work_order a where a.plan_end_date &lt;#{end} and a.plan_start_date >=#{start} and a.source='temporary_type'
+        UNION
+        select '3' style,count(*) as count from work_order a where a.plan_end_date &lt;#{end} and a.plan_start_date >=#{start} and a.source='plan_type'
+        UNION
+        select '4' style,count(*) as count from work_order a where a.plan_end_date &lt;#{end} and a.plan_start_date >=#{start} and a.source='defect_type'
+        ) t
+    </select>
+
+    <select id="countByProcess" parameterType="map" resultType="map">
+        select
+        SUM(CASE style WHEN '1' THEN count ELSE 0 END) createCount,
+        SUM(CASE style WHEN '2' THEN count ELSE 0 END) assignCount,
+        SUM(CASE style WHEN '3' THEN count ELSE 0 END) completeCount
+        from (
+        select '1' style, count(*) as count from work_order a where a.process='0' and a.plan_end_date &lt;#{end}
+        UNION
+        select '2' style, count(*) as count from work_order a where a.process='10' and (a.work_group_id in(select DISTINCT b.group_id from work_group_member b where b.user_id=#{id} ) or a.work_group_id in(select DISTINCT b.id from work_group b where b.leader_id=#{id}))
+        UNION
+        select '3' style, count(*) as count from work_order a where a.process='20'
+        ) t
+    </select>
+
+    <update id="removeDeviceId" parameterType="java.lang.Long">
+        UPDATE defect a set a.device_id=null ,a.device_name=null where a.id=#{defectId}
+    </update>
+
+    <update id="removePrice" parameterType="java.lang.Long">
+        UPDATE material a set a.price=null where a.id=#{materialId}
+    </update>
+</mapper>

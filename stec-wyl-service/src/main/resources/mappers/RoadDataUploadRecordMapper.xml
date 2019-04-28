@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stec.masterdata.mapper.wyl.RoadDataUploadRecordMapper">
+
+
+    <update id="updateByDataDate" parameterType="com.stec.masterdata.entity.wyl.RoadDataUploadRecord">
+        update road_data_upload_record
+        <trim prefix="set" suffixOverrides=",">
+            <if test="code != null">code=#{code},</if>
+            <if test="iriRecord != null">iri_record=#{iriRecord},</if>
+            <if test="diseaseRecord != null">disease_record=#{diseaseRecord},</if>
+            <if test="sendToAnalysis != null">send_to_analysis=#{sendToAnalysis},</if>
+            <if test="dataAnalysisTime != null">data_analysis_time=#{dataAnalysisTime},</if>
+            <if test="startAnalysis != null">start_analysis=#{startAnalysis},</if>
+            <if test="dataAnalysisTime != null">data_analysis_time=#{dataAnalysisTime},</if>
+            <if test="iriDataUploadTime != null">iri_data_upload_time=#{iriDataUploadTime},</if>
+            <if test="diseaseDataUploadTime != null">disease_data_upload_time=#{diseaseDataUploadTime},</if>
+            <if test="roadEvaluateReportId != null">road_evaluate_report_id=#{roadEvaluateReportId},</if>
+        </trim>
+        where data_time=#{dataTime}
+    </update>
+
+
+</mapper>

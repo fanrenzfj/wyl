@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stec.masterdata.mapper.wyl.WylDefectMapper">
+
+    <!--<resultMap id="hisResultMap" type="com.stec.masterdata.entity.wyl.HistoricalDefect">-->
+        <!--<id column="id" property="id" />-->
+        <!--<result column="name" property="name" />-->
+        <!--<result column="code" property="code" />-->
+        <!--<result column="state" property="state" />-->
+        <!--<result column="discovery_date" property="discoveryDate" />-->
+        <!--<result column="major" property="major" />-->
+        <!--<result column="severity" property="severity" />-->
+        <!--<result column="defect_type_id" property="defectTypeId" />-->
+        <!--<result column="problem_remark" property="problemRemark" />-->
+        <!--<result column="inspect_user_id" property="inspectUserId" />-->
+        <!--<result column="report_situation" property="reportSituation" />-->
+        <!--<result column="report_node" property="reportNode" />-->
+        <!--<result column="report_doc_id" property="reportDocId" />-->
+        <!--<result column="deal_status" property="dealStatus" />-->
+        <!--<result column="block_road" property="blockRoad" />-->
+        <!--<result column="deal_remark" property="dealRemark" />-->
+        <!--<result column="deal_doc_id" property="dealDocId" />-->
+        <!--<result column="device_or_structure" property="deviceOrStructure" />-->
+        <!--<result column="device_or_structure_id" property="deviceOrStructureId" />-->
+        <!--<result column="project_id" property="projectId" />-->
+        <!--<result column="device_name" property="deviceName" />-->
+        <!--<result column="structure_name" property="structureName" />-->
+        <!--<result column="inspect_user" property="inspectUser" />-->
+        <!--<result column="location" property="location" />-->
+        <!--<result column="e_structure_device" property="eStructureDevice" />-->
+        <!--<result column="e_structure_device" property="eStructureDevice" />-->
+        <!--<result column="e_structure_device_name" property="eStructureDeviceName" />-->
+        <!--<result column="disease_type" property="diseaseType" />-->
+        <!--<result column="location" property="location" />-->
+    <!--</resultMap>-->
+
+    <resultMap id="hisResultMap" type="com.stec.masterdata.entity.wyl.HistoricalDefect">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="code" property="code" />
+        <result column="state" property="state" />
+        <result column="discovery_date" property="discoveryDate" />
+        <result column="major" property="major" />
+        <result column="severity" property="severity" />
+        <result column="defect_type_id" property="defectTypeId" />
+        <result column="disease_type" property="diseaseType" />
+        <result column="problem_remark" property="problemRemark" />
+        <result column="inspect_user_id" property="inspectUserId" />
+        <result column="report_situation" property="reportSituation" />
+        <result column="report_node" property="reportNode" />
+        <result column="report_doc_id" property="reportDocId" />
+        <result column="deal_status" property="dealStatus" />
+        <result column="block_road" property="blockRoad" />
+        <result column="deal_remark" property="dealRemark" />
+        <result column="deal_doc_id" property="dealDocId" />
+        <result column="device_or_structure" property="deviceOrStructure" />
+        <result column="project_id" property="projectId" />
+        <result column="structure_id" property="structureId" />
+        <result column="device_id" property="deviceId" />
+        <result column="device_or_structure_id" property="deviceOrStructureId" />
+        <result column="pic_url" property="pic_url" />
+        <result column="inspect_user" property="inspectUser" />
+        <result column="e_structure_device" property="eStructureDevice" />
+        <result column="e_structure_device_name" property="eStructureDeviceName" />
+        <result column="location" property="location" />
+        <result column="device_name" property="deviceName" />
+        <result column="structure_name" property="structureName" />
+    </resultMap>
+
+    <sql id="hisCondition">
+        <if test="id != null">and h.id = #{id}</if>
+        <if test="name != null">and h.name = #{name}</if>
+        <if test="code != null">and h.code = #{code}</if>
+        <if test="state != null">and h.state = #{state}</if>
+        <if test="startDate != null and endDate != null">and h.discovery_date between #{startDate} and #{endDate}</if>
+        <if test="major != null">and h.major = #{major}</if>
+        <if test="severity != null">and h.severity = #{severity}</if>
+        <if test="structureId != null">and h.structure_id = #{structureId}</if>
+        <if test="deviceId != null">and h.device_id = #{deviceId}</if>
+        <if test="defectTypeId != null">and h.defect_type_id = #{defectTypeId}</if>
+        <if test="problemRemark != null">and h.problem_remark = #{problemRemark}</if>
+        <if test="inspectUserId != null">and h.inspect_user_id = #{inspectUserId}</if>
+        <if test="reportSituation != null">and h.report_situation = #{reportSituation}</if>
+        <if test="reportNode != null">and h.report_node = #{reportNode}</if>
+        <if test="reportDocId != null">and h.report_doc_id = #{reportDocId}</if>
+        <if test="dealStatus != null">and h.deal_status = #{dealStatus}</if>
+        <if test="blockRoad != null">and h.block_road = #{blockRoad}</if>
+        <if test="dealRemark != null">and h.deal_remark = #{dealRemark}</if>
+        <if test="dealDocId != null">and h.deal_doc_id = #{dealDocId}</if>
+        <if test="deviceOrStructure != null">and h.device_or_structure = #{deviceOrStructure}</if>
+        <if test="deviceOrStructureId != null">and h.device_or_structure_id = #{deviceOrStructureId}</if>
+        <if test="projectId != null">and h.project_id = #{projectId}</if>
+        <if test="deviceName != null">and (d.name like concat('%',#{deviceName} , '%') or s.name like concat('%',#{deviceName} , '%')) </if>
+    </sql>
+
+    <select id="hisPageList" parameterType="map" resultMap="hisResultMap">
+        select h.*, s.`name` structure_name, d.name device_name from historical_defect h
+        LEFT JOIN structure s on s.id = h.device_or_structure_id and h.device_or_structure = 'structure'
+        LEFT JOIN device d on d.id = h.device_or_structure_id and h.device_or_structure = 'device'
+        LEFT JOIN defect_type dt on h.defect_type_id = dt.id
+        <where>
+          <include refid="hisCondition"/>
+           <if test="defectTypeName != null">and dt.name like CONCAT('%', #{defectTypeName}, '%')  </if>
+        </where>
+        order by h.discovery_date desc
+        <if test="start != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="hisPageCount" parameterType="map" resultType="int">
+        select count(0) from historical_defect h
+        LEFT JOIN structure s on s.id = h.device_or_structure_id and h.device_or_structure = 'structure'
+        LEFT JOIN device d on d.id = h.device_or_structure_id and h.device_or_structure = 'device'
+        LEFT JOIN defect_type dt on h.defect_type_id = dt.id
+        <where>
+            <include refid="hisCondition"/>
+            <if test="defectTypeName != null">and dt.name like CONCAT('%', #{defectTypeName}, '%')  </if>
+        </where>
+    </select>
+
+    <resultMap id="defectTypeResultMap" type="com.stec.masterdata.entity.wyl.DefectType">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="code" property="code" />
+        <result column="state" property="state" />
+        <result column="type" property="type" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+    <select id="defectTypeList" resultMap="defectTypeResultMap" parameterType="map">
+        select d.* from defect_type d LEFT JOIN defect_type_usage du ON d.id = du.defect_type_id
+        where d.type = #{type} and (du.`code` = #{typeCode} or du.`code` is null);
+    </select>
+
+</mapper>

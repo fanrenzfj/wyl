@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stec.masterdata.mapper.wyl.EvaluateReportItemMyMapper">
+    <select id="findNum" resultType="map">
+        SELECT `level` as name ,COUNT(id) as 'value' FROM evaluate_report_item where evaluate_report_id=#{reportId} and parent_id= #{parentId} GROUP BY `level`
+    </select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stec.masterdata.mapper.wyl.RoadEvaluateMapper">
+
+    <select id="indexState" parameterType="map" resultType="map">
+        select ${index}_level level, count(0) num from road_evaluate_detail where report_id = #{reportId}  and ${index}_level is not null group by ${index}_level order by ${index}_level;
+    </select>
+
+    <resultMap id="downloadEvaDataMap" type="com.stec.masterdata.entity.wyl.RoadEvaluateDetail">
+        <result column="start_date" property="startDate" />
+        <result column="line_code" property="lineCode" />
+        <result column="code" property="code" />
+        <result column="start" property="start" />
+        <result column="end" property="end" />
+        <result column="iri" property="iri" />
+        <result column="rd" property="rd" />
+    </resultMap>
+
+    <select id="selectEvaDataReport" resultMap="downloadEvaDataMap" parameterType="map">
+        SELECT start_date,(select ii.code from road_evaluate_item ii where ii.id = (select parent_id from road_evaluate_item i where i.code = d.`code` limit 1)) line_code ,
+        code,`start`,`end`,'' rd,'' iri,rdi,rqi,pci,sri,pssi,pqi FROM `road_evaluate_detail` d where report_id = #{reportId} ;
+    </select>
+
+</mapper>
