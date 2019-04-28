@@ -618,6 +618,7 @@ public class HistoricalDefectRestController extends BaseController {
     @ApiOperation("获取设施或者设备的历史缺陷")
     @RequestMapping("/getByDeviceOrStructureId")
     public ResultForm getByDeviceOrStructureId(@ApiParam(value = "{id:id 设施或者设备id;deviceOrStructure:device||structure;}") @RequestBody JsonRequestBody jsonRequestBody) {
+       //git二次提交
         Long id = jsonRequestBody.getLong("id");
         if (ObjectUtils.isNull(id)) {
             return ResultForm.createErrorResultForm(jsonRequestBody, "设施或者设备ID不能为空");
